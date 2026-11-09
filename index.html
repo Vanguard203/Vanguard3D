@@ -1,39 +1,90 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#10172b">
-<title>Vanguard 3D - Prototype</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#081321">
+<title>Vanguard 3D - Battle Field</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at center,#26385c,#080d1b 75%);color:#fff;font-family:system-ui,sans-serif;min-height:100vh;overflow:hidden}
-header{height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#090f20cc;border-bottom:1px solid #52658b}
-h1{font-size:17px;margin:0;letter-spacing:.08em}.tag{font-size:11px;color:#a9c7ff}
-main{height:calc(100vh - 112px);display:flex;flex-direction:column;align-items:center;justify-content:space-around;padding:10px;perspective:900px}
-.status{display:flex;gap:22px;align-items:center;background:#0b1429bb;border:1px solid #52658b;border-radius:12px;padding:8px 18px;font-weight:700}.life{color:#ff8d9b}
-.field{width:min(92vw,620px);height:min(58vh,470px);position:relative;transform-style:preserve-3d;transform:rotateX(48deg);border:2px solid #6f91c9;border-radius:18px;background:linear-gradient(135deg,#153d50dd,#172d4ddd);box-shadow:0 20px 55px #000b,inset 0 0 40px #7ccaff22;display:grid;grid-template-rows:1fr 1fr;gap:5px;padding:12px}
-.rowfield{display:flex;align-items:center;justify-content:space-evenly;border-bottom:1px solid #9db9e655;position:relative}.rowfield:last-child{border:0}
-.unit{width:clamp(65px,18vw,105px);height:clamp(85px,21vw,130px);border:2px solid #b9d9ff;border-radius:9px;background:linear-gradient(145deg,#456e9d,#172641 65%);box-shadow:0 8px 15px #0009;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5px;transform:rotateX(-48deg) translateZ(12px);transition:.35s}
-.unit strong{font-size:12px}.unit small{font-size:10px;color:#c5ddff}.unit .symbol{font-size:30px;margin-bottom:4px}.unit.enemy{background:linear-gradient(145deg,#9c4057,#351827);border-color:#ffb4c0}
-.unit.summoned{animation:appear .65s ease-out}@keyframes appear{0%{opacity:0;transform:rotateX(-48deg) translateZ(100px) scale(.3)}70%{transform:rotateX(-48deg) translateZ(0) scale(1.12)}100%{opacity:1;transform:rotateX(-48deg) translateZ(12px) scale(1)}}
-.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:12px;background:#080e1dcc;border-top:1px solid #405477}
-button{border:1px solid #9ec5ff;background:linear-gradient(#315b91,#172e52);color:white;border-radius:10px;padding:12px 18px;font-size:14px;font-weight:700;min-width:105px;box-shadow:0 4px 12px #0006}button:active{transform:translateY(2px)}button:disabled{opacity:.4}
-#message{font-size:13px;color:#d5e6ff;text-align:center;min-height:20px}
-@media(max-height:650px){main{height:calc(100vh - 104px);padding:4px}.field{height:48vh}.status{padding:5px 12px}.controls{padding:7px}button{padding:9px 12px}}
-
-/* Mobile layout fix: keep the action buttons reachable on short screens */
-body{overflow-x:hidden;overflow-y:auto;min-height:100dvh}
-main{height:auto;min-height:calc(100dvh - 112px);justify-content:center;gap:12px;padding:12px 10px 18px}
-.field{height:clamp(250px,42dvh,400px);flex-shrink:0}
-.controls{position:sticky;bottom:0;z-index:5;padding:12px 8px calc(12px + env(safe-area-inset-bottom));background:#080e1df2}
-button{min-height:48px;flex:1 1 28%;max-width:190px}
-</style></head><body>
-<header><h1>VANGUARD 3D</h1><span class="tag">個人制作プロトタイプ v0.1</span></header>
-<main><div class="status"><span>YOU</span><span class="life">♥ 5</span><span>VS</span><span class="life">♥ 5</span><span>CPU</span></div>
-<div class="field" aria-label="3D風バトルフィールド"><div class="rowfield" id="enemy"><div class="unit enemy"><span class="symbol">👾</span><strong>CPUユニット</strong><small>POWER 13000</small></div></div><div class="rowfield" id="player"><div class="unit"><span class="symbol">⚔️</span><strong>待機中</strong><small>YOUR UNIT</small></div></div></div>
-<div id="message">ユニットを召喚して、アタックしてみよう！</div></main>
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;background:radial-gradient(ellipse at 50% 35%,#263e58,#08111f 72%);color:#f4f7ff;font-family:system-ui,sans-serif;overflow-x:hidden}
+header{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:#07101deF;border-bottom:1px solid #526c87}
+h1{font-size:16px;letter-spacing:.1em;margin:0}.tag{font-size:10px;color:#a9c7dc}
+main{width:min(100%,900px);margin:auto;padding:10px 10px 16px;display:flex;flex-direction:column;align-items:center;gap:9px}
+.status{display:flex;align-items:center;justify-content:center;gap:clamp(10px,4vw,28px);font-weight:800;font-size:13px;background:#101f32;border:1px solid #526b83;border-radius:12px;padding:7px 16px;width:min(100%,520px)}
+.life{color:#ff9aa9}.side-zones{width:100%;display:flex;justify-content:space-between;gap:8px}
+.zone{min-width:64px;text-align:center;border:1px solid #66829c;border-radius:7px;background:linear-gradient(145deg,#1a3045,#0c1b2d);padding:5px 8px;color:#c4d9e9;font-size:10px;box-shadow:inset 0 0 12px #8cc9ff12}
+.zone b{display:block;font-size:12px;color:#fff;margin-top:2px}
+.field{width:100%;height:clamp(350px,54dvh,510px);padding:10px 8px;border:2px solid #7796ad;border-radius:15px;background:linear-gradient(160deg,#315d68,#17414b 48%,#183e48);box-shadow:0 14px 35px #0009,inset 0 0 40px #b3efff20;display:grid;grid-template-rows:1fr 2px 1fr;position:relative;overflow:hidden;isolation:isolate}
+.field:before{content:"";position:absolute;inset:0;z-index:-1;background:repeating-linear-gradient(0deg,transparent 0 39px,#d4f1ff0a 40px),repeating-linear-gradient(90deg,transparent 0 39px,#d4f1ff0a 40px)}
+.half{display:grid;grid-template-rows:1fr 1fr;min-height:0;gap:3px}
+.midline{background:linear-gradient(90deg,transparent,#d7f3ff99,transparent);box-shadow:0 0 9px #bceaff88}
+.rowfield{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;justify-items:center;gap:3px;min-height:0}
+.rowlabel{position:absolute;left:13px;font-size:9px;letter-spacing:.12em;color:#d6efff88;pointer-events:none}
+.enemy-half .rowlabel{top:10px}.player-half .rowlabel{bottom:10px}
+.circle{width:clamp(68px,19vw,112px);height:clamp(68px,19vw,112px);max-height:100%;aspect-ratio:1;border-radius:50%;border:2px solid #b4d6d9a8;background:radial-gradient(circle at 50% 42%,#8fc6c52b,#0c2a3599 68%);box-shadow:inset 0 0 14px #b9ffff25,0 3px 7px #0018;display:flex;align-items:center;justify-content:center;position:relative;color:#d7f5f2}
+.circle:after{content:"";position:absolute;inset:6px;border:1px dashed #c5f2ee55;border-radius:50%}
+.circle .slot-name{font-size:9px;letter-spacing:.05em;color:#c6e3e1aa;text-align:center;z-index:1}
+.circle.vanguard{border:2px solid #f3d48c;background:radial-gradient(circle,#f5c86c44,#523b1e77 72%);box-shadow:inset 0 0 20px #ffe3a044,0 0 12px #ffc85b35}
+.circle.vanguard:after{border-color:#ffe0a077}
+.circle.rear{border-color:#a6c6ff99}
+.circle.enemy{border-color:#ffb1b899;background:radial-gradient(circle,#e96b7922,#3b1a2a88 72%)}
+.unit-token{z-index:2;width:85%;height:85%;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle at 35% 25%,#a9d9ff,#23446a 72%);border:2px solid #d6edff;box-shadow:0 0 16px #80c8ff77;animation:materialize .55s ease-out}
+.unit-token .symbol{font-size:clamp(20px,6vw,32px);line-height:1.1}.unit-token strong{font-size:clamp(8px,2.3vw,11px);line-height:1.2}.unit-token small{font-size:9px;color:#e2efff}
+@keyframes materialize{0%{opacity:0;transform:scale(.2) translateY(-22px)}70%{transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+.hand{width:100%;border:1px solid #536e8b;border-radius:10px;background:#0d1b2d;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;min-height:48px}
+.hand-title{font-size:10px;color:#b7cde0;letter-spacing:.1em}.cards{display:flex;gap:5px}.cardback{width:23px;height:32px;border:1px solid #91b5d9;border-radius:4px;background:repeating-linear-gradient(45deg,#294e75 0 4px,#18314f 4px 8px);box-shadow:0 2px 4px #0008}
+#message{font-size:12px;color:#d8eaff;text-align:center;min-height:18px}
+.controls{position:sticky;bottom:0;z-index:5;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:10px 8px calc(10px + env(safe-area-inset-bottom));background:#07101df2;border-top:1px solid #405477}
+button{border:1px solid #a5c9ed;background:linear-gradient(#315b82,#172d48);color:white;border-radius:9px;padding:11px 15px;font-size:13px;font-weight:750;min-height:46px;flex:1 1 28%;max-width:190px}
+button:active{transform:translateY(2px)}button:disabled{opacity:.4}
+@media(min-width:700px){main{padding-top:14px}.field{height:500px}.circle{width:112px;height:112px}.zone{min-width:90px;padding:7px 12px;font-size:11px}}
+@media(max-height:700px){.field{height:clamp(330px,50dvh,430px)}main{gap:6px;padding-top:6px}.status{padding:5px 12px}.hand{min-height:40px}.cardback{height:26px}}
+</style>
+</head>
+<body>
+<header><h1>VANGUARD 3D</h1><span class="tag">BATTLE FIELD TEST</span></header>
+<main>
+<div class="status"><span>CPU</span><span class="life">♥ 5</span><span>VS</span><span class="life">♥ 5</span><span>YOU</span></div>
+<div class="side-zones"><div class="zone">DROP<b>0</b></div><div class="zone">DAMAGE<b>0 / 6</b></div><div class="zone">DECK<b>40</b></div></div>
+<section class="field" aria-label="ヴァンガード風バトルフィールド">
+<div class="half enemy-half">
+<div class="rowlabel">OPPONENT</div>
+<div class="rowfield">
+<div class="circle rear enemy"><span class="slot-name">REAR-GUARD</span></div>
+<div class="circle rear enemy"><span class="slot-name">REAR-GUARD</span></div>
+<div class="circle rear enemy"><span class="slot-name">REAR-GUARD</span></div>
+</div>
+<div class="rowfield">
+<div class="circle enemy"><span class="slot-name">REAR-GUARD</span></div>
+<div class="circle vanguard enemy" id="enemy"><span class="slot-name">VANGUARD</span></div>
+<div class="circle enemy"><span class="slot-name">REAR-GUARD</span></div>
+</div>
+</div>
+<div class="midline"></div>
+<div class="half player-half">
+<div class="rowfield">
+<div class="circle rear" id="rear-left"><span class="slot-name">REAR-GUARD</span></div>
+<div class="circle vanguard" id="player"><span class="slot-name">VANGUARD</span></div>
+<div class="circle rear" id="rear-right"><span class="slot-name">REAR-GUARD</span></div>
+</div>
+<div class="rowfield">
+<div class="circle rear"><span class="slot-name">REAR-GUARD</span></div>
+<div class="circle rear"><span class="slot-name">REAR-GUARD</span></div>
+<div class="circle rear"><span class="slot-name">REAR-GUARD</span></div>
+</div>
+</div>
+</section>
+<div class="side-zones"><div class="zone">TRIGGER<b>—</b></div><div class="zone">SOUL<b>0</b></div><div class="zone">G / EXTRA<b>—</b></div></div>
+<div class="hand"><span class="hand-title">YOUR HAND</span><div class="cards"><i class="cardback"></i><i class="cardback"></i><i class="cardback"></i><i class="cardback"></i><i class="cardback"></i></div><span class="hand-title">5 CARDS</span></div>
+<div id="message">ヴァンガードサークルにユニットを召喚しよう！</div>
+</main>
 <div class="controls"><button id="summon">✦ ユニット召喚</button><button id="attack" disabled>⚔ アタック</button><button id="reset">リセット</button></div>
 <script>
 const player=document.getElementById('player'),message=document.getElementById('message'),attack=document.getElementById('attack');let summoned=false,turn=0;
-document.getElementById('summon').onclick=()=>{if(summoned)return;player.innerHTML='<div class="unit summoned"><span class="symbol">🛡️</span><strong>ブレイブ・ナイト</strong><small>POWER 13000</small></div>';summoned=true;attack.disabled=false;message.textContent='ブレイブ・ナイトをコール！ 次はアタックだ！';};
-attack.onclick=()=>{if(!summoned)return;turn++;const unit=player.querySelector('.unit');unit.animate([{transform:'rotateX(-48deg) translateZ(12px)'},{transform:'rotateX(-48deg) translateZ(75px) scale(1.12)'},{transform:'rotateX(-48deg) translateZ(12px)'}],{duration:650,easing:'ease-out'});message.textContent='アタック！ 3D演出は開発中（攻撃回数 '+turn+'）';};
-document.getElementById('reset').onclick=()=>{summoned=false;turn=0;player.innerHTML='<div class="unit"><span class="symbol">⚔️</span><strong>待機中</strong><small>YOUR UNIT</small></div>';attack.disabled=true;message.textContent='ユニットを召喚して、アタックしてみよう！';};
-</script></body></html>
+document.getElementById('summon').onclick=()=>{if(summoned)return;player.innerHTML='<div class="unit-token"><span class="symbol">🛡️</span><strong>ブレイブ・ナイト</strong><small>13000</small></div>';summoned=true;attack.disabled=false;message.textContent='ブレイブ・ナイトをヴァンガードサークルに召喚！';};
+attack.onclick=()=>{if(!summoned)return;turn++;const unit=player.querySelector('.unit-token');unit.animate([{transform:'scale(1)'},{transform:'scale(1.22) translateY(-12px)'},{transform:'scale(1)'}],{duration:650,easing:'ease-out'});message.textContent='ヴァンガードでアタック！ ('+turn+'回目)';};
+document.getElementById('reset').onclick=()=>{summoned=false;turn=0;player.innerHTML='<span class="slot-name">VANGUARD</span>';attack.disabled=true;message.textContent='ヴァンガードサークルにユニットを召喚しよう！';};
+</script>
+</body>
+</html>
