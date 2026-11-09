@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#071426"><title>Vanguard3D - 3D Battle</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#071426;color:#eef6ff;font-family:system-ui,sans-serif}header{padding:12px 14px;background:#10243b;border-bottom:1px solid #35516e;display:flex;justify-content:space-between;align-items:center}h1{font-size:17px;margin:0}.stats{font-size:12px;text-align:right;line-height:1.7}main{max-width:900px;margin:auto;padding:10px;display:grid;gap:10px}#stage{height:54vh;min-height:330px;max-height:600px;position:relative;border:1px solid #365777;border-radius:15px;overflow:hidden;background:radial-gradient(ellipse,#204b70,#08182a 75%)}canvas{display:block;width:100%;height:100%}#message{padding:10px 12px;border:1px solid #35516e;border-radius:10px;background:#10243b;font-size:13px;min-height:42px}.controls{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}button{border:1px solid #5d86ad;border-radius:10px;padding:13px 5px;background:linear-gradient(#28618c,#153653);color:white;font-weight:700;font-size:14px}button:nth-child(2){background:linear-gradient(#9c5437,#592b25)}button:nth-child(3){background:linear-gradient(#52647d,#29394f)}button:disabled{opacity:.35}.hint{text-align:center;color:#9bb1c9;font-size:11px}@media(max-width:430px){h1{font-size:14px}.controls{grid-template-columns:repeat(2,1fr)}#stage{height:52vh}}
+</style>
+</head>
+<body>
+<header><h1>⚔ Vanguard3D</h1><div class="stats"><div id="life">YOU ♥ 5　RIVAL ♥ 5</div><div id="turn">TURN 1</div></div></header>
+<main><section id="stage"><canvas id="view"></canvas></section><div id="message">召喚ボタンでユニットを呼び出そう！ 画面を左右にドラッグすると視点を回せるよ。</div><div class="controls"><button id="summon">ユニット召喚</button><button id="attack">アタック！</button><button id="end">ターン終了</button><button id="reset">リセット</button></div><div class="hint">3D演出テスト版 · オリジナル仮ユニットを使用 · インターネット接続が必要</div></main>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+const stage=document.querySelector('#stage'),canvas=document.querySelector('#view');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));
+const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x08182a,18,36);
+const camera=new THREE.PerspectiveCamera(42,1,.1,100);camera.position.set(0,10,18);
+scene.add(new THREE.HemisphereLight(0xa8dcff,0x17243b,2.1));
+const sun=new THREE.DirectionalLight(0xffffff,2.2);sun.position.set(-5,12,8);scene.add(sun);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(22,18),new THREE.MeshStandardMaterial({color:0x18334e,metalness:.35,roughness:.55}));floor.rotation.x=-Math.PI/2;floor.position.y=-.15;scene.add(floor);
+const grid=new THREE.GridHelper(22,22,0x4a91bb,0x294762);grid.position.y=-.14;scene.add(grid);
+function makeUnit(color,glow,x,z,scale=1){const g=new THREE.Group();g.position.set(x,.1,z);g.scale.setScalar(scale);
+ const base=new THREE.Mesh(new THREE.CylinderGeometry(.95,.95,.18,48),new THREE.MeshStandardMaterial({color,metalness:.6,roughness:.28,emissive:glow,emissiveIntensity:.5}));base.position.y=.12;g.add(base);
+ const core=new THREE.Mesh(new THREE.OctahedronGeometry(.68,1),new THREE.MeshStandardMaterial({color:0xeaf8ff,metalness:.25,roughness:.2,emissive:glow,emissiveIntensity:1.8}));core.position.y=1.05;g.add(core);
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(1.08,.045,8,64),new THREE.MeshBasicMaterial({color:glow}));ring.rotation.x=Math.PI/2;ring.position.y=.32;g.add(ring);
+ const beam=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,1.8,8),new THREE.MeshBasicMaterial({color:glow}));beam.position.y=1.05;g.add(beam);
+ g.userData={core,ring,homeZ:z};scene.add(g);return g}
+let allies=[],rivals=[],you=5,foe=5,turn=1,used=false,busy=false,ended=false,angle=0,drag=false,lastX=0;
+const $=id=>document.getElementById(id);
+function message(s){$('message').textContent=s}
+function update(){ $('life').textContent='YOU ♥ '+you+'　RIVAL ♥ '+foe;$('turn').textContent='TURN '+turn;
+ $('summon').disabled=busy||ended||used||allies.length>=3;$('attack').disabled=busy||ended||!allies.length;$('end').disabled=busy||ended}
+function flash(s){message(s)}
+function summon(){if(busy||ended||used||allies.length>=3)return;used=true;busy=true;const u=makeUnit(0x286da6,0x39caff,(allies.length-1)*3,4,.85);allies.push(u);u.position.y=3;flash('CALL! ユニット召喚！');let t=0;const down=()=>{t+=.04;u.position.y=Math.max(.1,3-t*3);if(t<1)requestAnimationFrame(down);else{u.position.y=.1;busy=false;update()}};down();update()}
+function attack(){if(busy||ended||!allies.length)return;busy=true;const u=allies[allies.length-1],start=u.position.clone();let t=0,hit=false;flash('ATTACK!');const step=()=>{t+=.035;u.position.z=4-Math.sin(Math.min(t,1)*Math.PI)*5;if(t>.5&&!hit){hit=true;foe=Math.max(0,foe-1);flash('HIT! 相手に1ダメージ！');if(foe===0){ended=true;flash('WIN! ファイト勝利！')}}if(t<1)requestAnimationFrame(step);else{u.position.copy(start);busy=false;update()}};step();update()}
+function endTurn(){if(busy||ended)return;turn++;used=false;if(rivals.length<3){const u=makeUnit(0x853e59,0xff5e8b,(rivals.length-1)*3,-4,.85);rivals.push(u)}if(allies.length)allies.shift().parent.remove(allies[0]||new THREE.Object3D()); // replaced below
+// Rebuild allied lineup after the turn
+allies.forEach((u,i)=>u.position.x=(i-(allies.length-1)/2)*3);
+if(turn%3===0){you=Math.max(0,you-1);if(you===0){ended=true;flash('LOSE... 自分のライフが0になった')}}if(!ended)flash('TURN '+turn+'：あなたのターン！');update()}
+function reset(){[...allies,...rivals].forEach(u=>scene.remove(u));allies=[];rivals=[];you=5;foe=5;turn=1;used=false;busy=false;ended=false;flash('リセットしました。ユニットを召喚しよう！');update()}
+$('summon').onclick=summon;$('attack').onclick=attack;$('end').onclick=endTurn;$('reset').onclick=reset;
+stage.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX});window.addEventListener('pointerup',()=>drag=false);window.addEventListener('pointermove',e=>{if(drag){angle+=(e.clientX-lastX)*.006;lastX=e.clientX}});
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}new ResizeObserver(resize).observe(stage);resize();
+const clock=new THREE.Clock();function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();[...allies,...rivals].forEach((u,i)=>{u.userData.core.rotation.y+=.012;u.userData.ring.rotation.z+=.008;u.userData.core.position.y=1.05+Math.sin(t*2+i)*.08});camera.position.x=Math.sin(angle)*18;camera.position.z=Math.cos(angle)*18;camera.lookAt(0,0,0);renderer.render(scene,camera)}animate();update();
+</script></body></html>
