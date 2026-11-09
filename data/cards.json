@@ -1,0 +1,38 @@
+{
+  "game": "Vanguard ZERO",
+  "dataPolicy": "Use the Japanese Vanguard ZERO card text and stats for the selected card release/version. Do not substitute paper TCG text.",
+  "cards": [
+    {
+      "id": "VGZERO_BT33027",
+      "name": "星輝兵 カオスブレイカー・ドラゴン",
+      "kana": "スターベイダー カオスブレイカー・ドラゴン",
+      "clan": "リンクジョーカー",
+      "race": "サイバードラゴン",
+      "grade": 3,
+      "power": 11000,
+      "rarity": "RRR",
+      "skillIcon": "ツインドライブ",
+      "skills": [
+        {
+          "zone": "V",
+          "condition": "LB④",
+          "timing": "ターン開始時",
+          "cost": "SB①",
+          "effect": "直前の相手のエンドフェイズ中に解呪されたリアガードを１枚退却させる。退却させたら、１枚引く。"
+        },
+        {
+          "zone": "V",
+          "limit": "ターン1回",
+          "timing": "起動",
+          "cost": "CB①と[「星輝兵」を２枚捨てる]",
+          "effect": "相手のリアガードを１枚呪縛する。"
+        }
+      ],
+      "source": "https://vgzero.bushimo.jp/cardlist/GACHA010/BT33027/",
+      "sourceName": "ヴァンガード ZERO 公式カードリスト",
+      "set": "絶禍繚乱",
+      "releaseDate": "2021-01-01",
+      "implementationStatus": "data-registered-effect-not-yet-implemented"
+    }
+  ]
+}
