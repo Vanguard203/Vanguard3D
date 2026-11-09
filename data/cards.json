@@ -1,6 +1,6 @@
 {
   "game": "Vanguard ZERO",
-  "dataPolicy": "Use the Japanese Vanguard ZERO card text and stats for the selected card release/version. Do not substitute paper TCG text.",
+  "dataPolicy": "Use only card data verified against the official Japanese Vanguard ZERO card list for the matching ZERO release. Never substitute paper TCG text.",
   "cards": [
     {
       "id": "VGZERO_BT33027",
@@ -16,15 +16,15 @@
         {
           "zone": "V",
           "condition": "LB④",
-          "timing": "ターン開始時",
+          "timing": "相手のエンドフェイズ中、相手の呪縛カードが解呪された時",
           "cost": "SB①",
-          "effect": "直前の相手のエンドフェイズ中に解呪されたリアガードを１枚退却させる。退却させたら、１枚引く。"
+          "effect": "その解呪されたユニット１枚を退却させ、１枚引く。"
         },
         {
           "zone": "V",
           "limit": "ターン1回",
           "timing": "起動",
-          "cost": "CB①と[「星輝兵」を２枚捨てる]",
+          "cost": "CB①と[手札から「星輝兵」を含むカードを１枚捨てる]",
           "effect": "相手のリアガードを１枚呪縛する。"
         }
       ],
@@ -32,7 +32,7 @@
       "sourceName": "ヴァンガード ZERO 公式カードリスト",
       "set": "絶禍繚乱",
       "releaseDate": "2021-01-01",
-      "implementationStatus": "data-registered-effect-not-yet-implemented"
+      "implementationStatus": "data-verified-effect-not-yet-implemented"
     }
   ]
 }
