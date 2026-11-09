@@ -1,55 +1,32 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#081426">
-<title>Vanguard3D - Battle Prototype</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#10172b">
+<title>Vanguard 3D - Prototype</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#07111f;color:#fff;font-family:system-ui,sans-serif;overflow:hidden}
-header{height:58px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;background:#101e31;border-bottom:1px solid #35506f}
-h1{font-size:18px;margin:0}.life{font-weight:700;font-size:14px}
-main{height:calc(100dvh - 58px);display:flex;flex-direction:column;padding:12px;gap:10px}
-.status{min-height:42px;padding:10px;border:1px solid #35506f;border-radius:12px;background:#12243a;font-size:14px}
-.field{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-around;perspective:700px;border:1px solid #35506f;border-radius:18px;background:radial-gradient(ellipse at center,#183958,#09182a 70%);padding:12px;position:relative}
-.zone{height:43%;display:flex;align-items:center;justify-content:center;gap:10px;transform:rotateX(-8deg);border:1px dashed #52708f;border-radius:14px;background:#ffffff08}
-.zone small{position:absolute;top:6px;left:10px;color:#a9c4e4}.zone.enemy{transform:rotateX(8deg)}
-.unit{width:min(27%,105px);height:105px;border-radius:14px;border:2px solid #7db9ff;background:linear-gradient(145deg,#3479b7,#132d50);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 8px 20px #0008;animation:pop .25s ease-out}
-.enemy .unit{border-color:#ff9b86;background:linear-gradient(145deg,#b54a42,#4a1c2b)}
-.unit b{font-size:12px;text-align:center}.unit strong{font-size:20px;margin-top:8px}
-@keyframes pop{from{transform:scale(.5) translateY(20px);opacity:0}to{transform:scale(1);opacity:1}}
-.controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-button{border:0;border-radius:12px;padding:14px 4px;font-size:15px;font-weight:700;color:white;background:#1769aa;min-height:52px}
-button:nth-child(2){background:#a94339}button:nth-child(3){background:#45566d}button:disabled{opacity:.35}
-.note{text-align:center;color:#9db2ca;font-size:11px}
-</style>
-</head>
-<body>
-<header><h1>⚔ Vanguard3D</h1><div class="life" id="life">YOU ♥ 5　ENEMY ♥ 5</div></header>
-<main>
-<div class="status" id="status">あなたのターン！ユニットを召喚して攻撃しよう。</div>
-<section class="field">
-<div class="zone enemy" id="enemy"><small>ENEMY FIELD</small></div>
-<div class="zone" id="player"><small>YOUR FIELD</small></div>
-</section>
-<div class="controls"><button id="summon">召喚</button><button id="attack">攻撃</button><button id="end">ターン終了</button></div>
-<div class="note">スマホ向けブラウザ試作版・操作確認用</div>
-</main>
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at center,#26385c,#080d1b 75%);color:#fff;font-family:system-ui,sans-serif;min-height:100vh;overflow:hidden}
+header{height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#090f20cc;border-bottom:1px solid #52658b}
+h1{font-size:17px;margin:0;letter-spacing:.08em}.tag{font-size:11px;color:#a9c7ff}
+main{height:calc(100vh - 112px);display:flex;flex-direction:column;align-items:center;justify-content:space-around;padding:10px;perspective:900px}
+.status{display:flex;gap:22px;align-items:center;background:#0b1429bb;border:1px solid #52658b;border-radius:12px;padding:8px 18px;font-weight:700}.life{color:#ff8d9b}
+.field{width:min(92vw,620px);height:min(58vh,470px);position:relative;transform-style:preserve-3d;transform:rotateX(48deg);border:2px solid #6f91c9;border-radius:18px;background:linear-gradient(135deg,#153d50dd,#172d4ddd);box-shadow:0 20px 55px #000b,inset 0 0 40px #7ccaff22;display:grid;grid-template-rows:1fr 1fr;gap:5px;padding:12px}
+.rowfield{display:flex;align-items:center;justify-content:space-evenly;border-bottom:1px solid #9db9e655;position:relative}.rowfield:last-child{border:0}
+.unit{width:clamp(65px,18vw,105px);height:clamp(85px,21vw,130px);border:2px solid #b9d9ff;border-radius:9px;background:linear-gradient(145deg,#456e9d,#172641 65%);box-shadow:0 8px 15px #0009;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5px;transform:rotateX(-48deg) translateZ(12px);transition:.35s}
+.unit strong{font-size:12px}.unit small{font-size:10px;color:#c5ddff}.unit .symbol{font-size:30px;margin-bottom:4px}.unit.enemy{background:linear-gradient(145deg,#9c4057,#351827);border-color:#ffb4c0}
+.unit.summoned{animation:appear .65s ease-out}@keyframes appear{0%{opacity:0;transform:rotateX(-48deg) translateZ(100px) scale(.3)}70%{transform:rotateX(-48deg) translateZ(0) scale(1.12)}100%{opacity:1;transform:rotateX(-48deg) translateZ(12px) scale(1)}}
+.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:12px;background:#080e1dcc;border-top:1px solid #405477}
+button{border:1px solid #9ec5ff;background:linear-gradient(#315b91,#172e52);color:white;border-radius:10px;padding:12px 18px;font-size:14px;font-weight:700;min-width:105px;box-shadow:0 4px 12px #0006}button:active{transform:translateY(2px)}button:disabled{opacity:.4}
+#message{font-size:13px;color:#d5e6ff;text-align:center;min-height:20px}
+@media(max-height:650px){main{height:calc(100vh - 104px);padding:4px}.field{height:48vh}.status{padding:5px 12px}.controls{padding:7px}button{padding:9px 12px}}
+</style></head><body>
+<header><h1>VANGUARD 3D</h1><span class="tag">個人制作プロトタイプ v0.1</span></header>
+<main><div class="status"><span>YOU</span><span class="life">♥ 5</span><span>VS</span><span class="life">♥ 5</span><span>CPU</span></div>
+<div class="field" aria-label="3D風バトルフィールド"><div class="rowfield" id="enemy"><div class="unit enemy"><span class="symbol">👾</span><strong>CPUユニット</strong><small>POWER 13000</small></div></div><div class="rowfield" id="player"><div class="unit"><span class="symbol">⚔️</span><strong>待機中</strong><small>YOUR UNIT</small></div></div></div>
+<div id="message">ユニットを召喚して、アタックしてみよう！</div></main>
+<div class="controls"><button id="summon">✦ ユニット召喚</button><button id="attack" disabled>⚔ アタック</button><button id="reset">リセット</button></div>
 <script>
-const $=id=>document.getElementById(id);let you=[],foe=[],yl=5,fl=5,turn=1,summoned=false,over=false;
-const names=['ブレード・ドラゴン','スターライト・ナイト','アストラル・ウィッチ'];
-function say(t){$('status').textContent=t}
-function render(){
- $('player').innerHTML='<small>YOUR FIELD</small>'+you.map(u=>'<div class="unit"><b>'+u.name+'</b><strong>'+u.pow+'</strong></div>').join('');
- $('enemy').innerHTML='<small>ENEMY FIELD</small>'+foe.map(u=>'<div class="unit"><b>'+u.name+'</b><strong>'+u.pow+'</strong></div>').join('');
- $('life').textContent='YOU ♥ '+yl+'　ENEMY ♥ '+fl;
- $('summon').disabled=over||summoned||you.length>=3;$('attack').disabled=over||you.length===0;$('end').disabled=over;
-}
-function check(){if(fl<=0){say('勝利！相手のライフを削り切った！');over=true}else if(yl<=0){say('敗北……もう一度挑戦しよう！');over=true}}
-$('summon').onclick=()=>{if(over||summoned||you.length>=3)return;let i=you.length;you.push({name:names[(turn-1)%3],pow:10000+i*2000+(turn-1)*500});summoned=true;say(you.at(-1).name+'を召喚！');render()};
-$('attack').onclick=()=>{if(over||!you.length)return;if(foe.length){foe.shift();say('アタック成功！相手ユニットを退却！')}else{fl--;say('ダイレクトアタック！相手ライフに1ダメージ！')}check();render()};
-$('end').onclick=()=>{if(over)return;turn++;if(foe.length<3)foe.push({name:'ライバルユニット',pow:9000+turn*500});if(you.length)you.shift();summoned=false;say('相手ターン終了。あなたのターンだ！');check();render()};
-render();
-</script>
-</body>
-</html>
+const player=document.getElementById('player'),message=document.getElementById('message'),attack=document.getElementById('attack');let summoned=false,turn=0;
+document.getElementById('summon').onclick=()=>{if(summoned)return;player.innerHTML='<div class="unit summoned"><span class="symbol">🛡️</span><strong>ブレイブ・ナイト</strong><small>POWER 13000</small></div>';summoned=true;attack.disabled=false;message.textContent='ブレイブ・ナイトをコール！ 次はアタックだ！';};
+attack.onclick=()=>{if(!summoned)return;turn++;const unit=player.querySelector('.unit');unit.animate([{transform:'rotateX(-48deg) translateZ(12px)'},{transform:'rotateX(-48deg) translateZ(75px) scale(1.12)'},{transform:'rotateX(-48deg) translateZ(12px)'}],{duration:650,easing:'ease-out'});message.textContent='アタック！ 3D演出は開発中（攻撃回数 '+turn+'）';};
+document.getElementById('reset').onclick=()=>{summoned=false;turn=0;player.innerHTML='<div class="unit"><span class="symbol">⚔️</span><strong>待機中</strong><small>YOUR UNIT</small></div>';attack.disabled=true;message.textContent='ユニットを召喚して、アタックしてみよう！';};
+</script></body></html>
