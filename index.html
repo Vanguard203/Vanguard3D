@@ -3,53 +3,65 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#081321">
+<meta name="theme-color" content="#080f1b">
 <title>Vanguard 3D - Battle Field</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100dvh;background:radial-gradient(ellipse at 50% 35%,#263e58,#08111f 72%);color:#f4f7ff;font-family:system-ui,sans-serif;overflow-x:hidden}
-header{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:#07101deF;border-bottom:1px solid #526c87}
-h1{font-size:16px;letter-spacing:.1em;margin:0}.tag{font-size:10px;color:#a9c7dc}
-main{width:min(100%,900px);margin:auto;padding:10px 10px 16px;display:flex;flex-direction:column;align-items:center;gap:9px}
-.status{display:flex;align-items:center;justify-content:center;gap:clamp(10px,4vw,28px);font-weight:800;font-size:13px;background:#101f32;border:1px solid #526b83;border-radius:12px;padding:7px 16px;width:min(100%,520px)}
-.life{color:#ff9aa9}.side-zones{width:100%;display:flex;justify-content:space-between;gap:8px}
-.zone{min-width:64px;text-align:center;border:1px solid #66829c;border-radius:7px;background:linear-gradient(145deg,#1a3045,#0c1b2d);padding:5px 8px;color:#c4d9e9;font-size:10px;box-shadow:inset 0 0 12px #8cc9ff12}
-.zone b{display:block;font-size:12px;color:#fff;margin-top:2px}
-.field{width:100%;height:clamp(350px,54dvh,510px);padding:10px 8px;border:2px solid #7796ad;border-radius:15px;background:linear-gradient(160deg,#315d68,#17414b 48%,#183e48);box-shadow:0 14px 35px #0009,inset 0 0 40px #b3efff20;display:grid;grid-template-rows:1fr 2px 1fr;position:relative;overflow:hidden;isolation:isolate}
-.field:before{content:"";position:absolute;inset:0;z-index:-1;background:repeating-linear-gradient(0deg,transparent 0 39px,#d4f1ff0a 40px),repeating-linear-gradient(90deg,transparent 0 39px,#d4f1ff0a 40px)}
-.half{display:grid;grid-template-rows:1fr 1fr;min-height:0;gap:3px}
-.midline{background:linear-gradient(90deg,transparent,#d7f3ff99,transparent);box-shadow:0 0 9px #bceaff88}
-.rowfield{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;justify-items:center;gap:3px;min-height:0}
-.rowlabel{position:absolute;left:13px;font-size:9px;letter-spacing:.12em;color:#d6efff88;pointer-events:none}
-.enemy-half .rowlabel{top:10px}.player-half .rowlabel{bottom:10px}
-.circle{width:clamp(68px,19vw,112px);height:clamp(68px,19vw,112px);max-height:100%;aspect-ratio:1;border-radius:50%;border:2px solid #b4d6d9a8;background:radial-gradient(circle at 50% 42%,#8fc6c52b,#0c2a3599 68%);box-shadow:inset 0 0 14px #b9ffff25,0 3px 7px #0018;display:flex;align-items:center;justify-content:center;position:relative;color:#d7f5f2}
-.circle:after{content:"";position:absolute;inset:6px;border:1px dashed #c5f2ee55;border-radius:50%}
-.circle .slot-name{font-size:9px;letter-spacing:.05em;color:#c6e3e1aa;text-align:center;z-index:1}
-.circle.vanguard{border:2px solid #f3d48c;background:radial-gradient(circle,#f5c86c44,#523b1e77 72%);box-shadow:inset 0 0 20px #ffe3a044,0 0 12px #ffc85b35}
-.circle.vanguard:after{border-color:#ffe0a077}
-.circle.rear{border-color:#a6c6ff99}
-.circle.enemy{border-color:#ffb1b899;background:radial-gradient(circle,#e96b7922,#3b1a2a88 72%)}
-.unit-token{z-index:2;width:85%;height:85%;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle at 35% 25%,#a9d9ff,#23446a 72%);border:2px solid #d6edff;box-shadow:0 0 16px #80c8ff77;animation:materialize .55s ease-out}
-.unit-token .symbol{font-size:clamp(20px,6vw,32px);line-height:1.1}.unit-token strong{font-size:clamp(8px,2.3vw,11px);line-height:1.2}.unit-token small{font-size:9px;color:#e2efff}
-@keyframes materialize{0%{opacity:0;transform:scale(.2) translateY(-22px)}70%{transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
-.hand{width:100%;border:1px solid #536e8b;border-radius:10px;background:#0d1b2d;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;min-height:48px}
-.hand-title{font-size:10px;color:#b7cde0;letter-spacing:.1em}.cards{display:flex;gap:5px}.cardback{width:23px;height:32px;border:1px solid #91b5d9;border-radius:4px;background:repeating-linear-gradient(45deg,#294e75 0 4px,#18314f 4px 8px);box-shadow:0 2px 4px #0008}
-#message{font-size:12px;color:#d8eaff;text-align:center;min-height:18px}
-.controls{position:sticky;bottom:0;z-index:5;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:10px 8px calc(10px + env(safe-area-inset-bottom));background:#07101df2;border-top:1px solid #405477}
-button{border:1px solid #a5c9ed;background:linear-gradient(#315b82,#172d48);color:white;border-radius:9px;padding:11px 15px;font-size:13px;font-weight:750;min-height:46px;flex:1 1 28%;max-width:190px}
-button:active{transform:translateY(2px)}button:disabled{opacity:.4}
-@media(min-width:700px){main{padding-top:14px}.field{height:500px}.circle{width:112px;height:112px}.zone{min-width:90px;padding:7px 12px;font-size:11px}}
-@media(max-height:700px){.field{height:clamp(330px,50dvh,430px)}main{gap:6px;padding-top:6px}.status{padding:5px 12px}.hand{min-height:40px}.cardback{height:26px}}
+:root{--gold:#e8c77b;--blue:#80caff;--red:#ff9292}
+body{margin:0;min-height:100dvh;background:radial-gradient(ellipse at 50% 35%,#263b55 0,#101b2d 48%,#060b14 100%);color:#f5f7ff;font-family:system-ui,sans-serif;overflow-x:hidden}
+header{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 13px;background:linear-gradient(90deg,#070d18,#172940,#070d18);border-bottom:1px solid #8ca9c7}
+h1{font-size:15px;letter-spacing:.16em;margin:0;text-shadow:0 0 12px #78bfff}.tag{font-size:9px;color:#a9c7dc;letter-spacing:.13em}
+main{width:min(100%,900px);margin:auto;padding:8px 9px 12px;display:flex;flex-direction:column;align-items:center;gap:7px}
+.status{width:100%;display:flex;align-items:center;justify-content:space-between;gap:5px;background:linear-gradient(100deg,#111c2d,#263c56,#111c2d);border:1px solid #718ca9;border-radius:8px;padding:6px 10px;box-shadow:0 4px 14px #0007}
+.player-info{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800}.avatar{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 25%,#a6d8ff,#244568 70%);border:1px solid #d7edff;box-shadow:0 0 9px #70bdff66}.cpu .avatar{background:radial-gradient(circle at 35% 25%,#ffc2c2,#692d42 70%);border-color:#ffc5c5}.life{color:#ff9ba8;font-size:13px;letter-spacing:.04em}.vs{font-size:10px;color:#d8c58e;letter-spacing:.2em}
+.side-zones{width:100%;display:flex;justify-content:space-between;gap:6px}
+.zone{flex:1;text-align:center;border:1px solid #5f7894;border-radius:5px;background:linear-gradient(145deg,#243950,#101d2d);padding:4px 5px;color:#bcd3e8;font-size:9px;box-shadow:inset 0 0 12px #8cc9ff12}
+.zone b{display:block;font-size:12px;color:#fff;margin-top:1px}
+.field-wrap{width:100%;perspective:900px;padding:3px 0}
+.field{width:100%;height:clamp(355px,53dvh,510px);padding:10px 7px;border:2px solid #9a8050;border-radius:12px;background:linear-gradient(145deg,#4b5964,#172a3b 18%,#203d4b 50%,#142b3a 85%,#4b5964);box-shadow:0 16px 30px #000b,inset 0 0 0 2px #172333,inset 0 0 35px #a5d7ff22;display:grid;grid-template-rows:1fr 3px 1fr;position:relative;overflow:hidden;isolation:isolate}
+.field:before{content:"";position:absolute;inset:0;z-index:-1;background:repeating-linear-gradient(0deg,transparent 0 31px,#d8edff0b 32px),repeating-linear-gradient(90deg,transparent 0 31px,#d8edff0b 32px),radial-gradient(ellipse at center,#76b8c21c,transparent 68%)}
+.field:after{content:"";position:absolute;inset:5px;border:1px solid #d8c18b55;border-radius:8px;pointer-events:none}
+.half{display:grid;grid-template-rows:1fr 1fr;min-height:0;gap:3px;position:relative}
+.midline{background:linear-gradient(90deg,transparent,#e9d39b,#fff4cf,#e9d39b,transparent);box-shadow:0 0 12px #e7d39b99}
+.rowfield{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;justify-items:center;gap:2px;min-height:0}
+.rowlabel{position:absolute;left:8px;font-size:8px;letter-spacing:.18em;color:#e1e9f077;pointer-events:none;z-index:2}
+.enemy-half .rowlabel{top:1px}.player-half .rowlabel{bottom:1px}
+.circle{width:clamp(69px,19vw,112px);height:clamp(69px,19vw,112px);max-height:100%;aspect-ratio:1;border-radius:50%;border:2px solid #9eb9c6;background:radial-gradient(ellipse at 50% 40%,#8ac3d02b 0,#244b5c88 58%,#081b2a 100%);box-shadow:inset 0 0 0 3px #142b3a,inset 0 0 0 5px #9cb8c455,inset 0 0 18px #a6eaff28,0 4px 7px #0009;display:flex;align-items:center;justify-content:center;position:relative;color:#d7f5f2;transition:filter .2s,transform .2s}
+.circle:before{content:"";position:absolute;inset:7px;border:1px solid #c9e4e877;border-radius:50%;box-shadow:inset 0 0 8px #b9eaff22}
+.circle:after{content:"";position:absolute;inset:12px;border:1px dashed #c5f2ee55;border-radius:50%}
+.circle .slot-name{font-size:8px;letter-spacing:.08em;color:#d6e8ee99;text-align:center;z-index:1;text-shadow:0 1px 3px #000}
+.circle.vanguard{border:2px solid var(--gold);background:radial-gradient(ellipse at 50% 40%,#f5d78b55,#70552b99 65%,#241b13);box-shadow:inset 0 0 0 3px #4b3820,inset 0 0 0 5px #f2d48a88,inset 0 0 22px #ffe3a077,0 0 14px #ffc85b55,0 4px 8px #000b}
+.circle.vanguard:before{border-color:#ffe6a9}.circle.vanguard:after{border-color:#ffe0a099}
+.circle.rear{border-color:#91b8dc;background:radial-gradient(ellipse at 50% 40%,#85b8ed33,#1a385788 68%,#0b1a2b)}
+.circle.enemy{border-color:#c88791;background:radial-gradient(ellipse at 50% 40%,#e96b7930,#542a3c88 68%,#1d1422)}
+.circle.enemy.vanguard{border-color:#e8bd77}
+.unit-token{z-index:2;width:82%;height:88%;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(145deg,#a8d9ff,#315b82 45%,#142b4a);border:2px solid #e2f2ff;box-shadow:0 0 16px #80c8ff99,0 3px 7px #000b;animation:materialize .55s ease-out;transform-origin:center}
+.unit-token .symbol{font-size:clamp(20px,6vw,32px);line-height:1.1}.unit-token strong{font-size:clamp(8px,2.3vw,11px);line-height:1.2;text-shadow:0 1px 3px #000}.unit-token small{font-size:9px;color:#e2efff}
+@keyframes materialize{0%{opacity:0;transform:scale(.2) translateY(-22px)}70%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+.hand{width:100%;border:1px solid #657f9d;border-radius:8px;background:linear-gradient(100deg,#0c1726,#1b2e45,#0c1726);padding:7px 8px;display:flex;align-items:center;justify-content:space-between;min-height:70px;box-shadow:inset 0 0 16px #8acbff12}
+.hand-title{font-size:9px;color:#b7cde0;letter-spacing:.1em;white-space:nowrap}.cards{display:flex;gap:5px;align-items:center}
+.hand-card{width:clamp(38px,10vw,54px);height:54px;border:1px solid #d4b879;border-radius:5px;background:linear-gradient(145deg,#385d7c,#14243a 55%,#090f1b);box-shadow:0 2px 5px #0009;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#e8d5a5;font-size:8px;position:relative;overflow:hidden}
+.hand-card:before{content:"";position:absolute;inset:3px;border:1px solid #d4b87966;border-radius:3px}.hand-card span{font-size:19px}.hand-card small{font-size:7px;color:#d7e7f8}
+#message{font-size:11px;color:#e1edff;text-align:center;min-height:17px;text-shadow:0 1px 4px #000}
+.controls{position:sticky;bottom:0;z-index:5;display:flex;gap:7px;justify-content:center;flex-wrap:wrap;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:linear-gradient(#0b1525f2,#050a12);border-top:1px solid #405477}
+button{border:1px solid #b6cce3;background:linear-gradient(#42688e,#172e49);color:white;border-radius:7px;padding:10px 12px;font-size:12px;font-weight:750;min-height:43px;flex:1 1 28%;max-width:190px;box-shadow:0 3px 8px #0008}
+button:active{transform:translateY(2px);filter:brightness(1.25)}button:disabled{opacity:.4}
+@media(min-width:700px){main{padding-top:12px}.field{height:500px}.circle{width:112px;height:112px}.zone{padding:6px 10px;font-size:10px}}
+@media(max-height:700px){.field{height:clamp(330px,49dvh,430px)}main{gap:5px;padding-top:5px}.status{padding:4px 9px}.hand{min-height:60px}}
 </style>
 </head>
 <body>
-<header><h1>VANGUARD 3D</h1><span class="tag">BATTLE FIELD TEST</span></header>
+<header><h1>VANGUARD ZERO</h1><span class="tag">3D BATTLE FIELD</span></header>
 <main>
-<div class="status"><span>CPU</span><span class="life">♥ 5</span><span>VS</span><span class="life">♥ 5</span><span>YOU</span></div>
-<div class="side-zones"><div class="zone">DROP<b>0</b></div><div class="zone">DAMAGE<b>0 / 6</b></div><div class="zone">DECK<b>40</b></div></div>
+<div class="status">
+ <div class="player-info cpu"><span class="avatar">♜</span><span>CPU</span><span class="life" id="cpu-life">♥ 5</span></div>
+ <span class="vs">FIGHT</span>
+ <div class="player-info"><span class="life" id="you-life">♥ 5</span><span>YOU</span><span class="avatar">♞</span></div>
+</div>
+<div class="side-zones"><div class="zone">DROP<b id="drop-count">0</b></div><div class="zone">DAMAGE<b id="damage-count">0 / 6</b></div><div class="zone">DECK<b id="deck-count">40</b></div></div>
 <section class="field" aria-label="ヴァンガード風バトルフィールド">
 <div class="half enemy-half">
-<div class="rowlabel">OPPONENT</div>
+<div class="rowlabel">ENEMY FIELD</div>
 <div class="rowfield">
 <div class="circle rear enemy"><span class="slot-name">REAR-GUARD</span></div>
 <div class="circle rear enemy"><span class="slot-name">REAR-GUARD</span></div>
@@ -69,21 +81,23 @@ button:active{transform:translateY(2px)}button:disabled{opacity:.4}
 <div class="circle rear" id="rear-right"><span class="slot-name">REAR-GUARD</span></div>
 </div>
 <div class="rowfield">
-<div class="circle rear"><span class="slot-name">REAR-GUARD</span></div>
-<div class="circle rear"><span class="slot-name">REAR-GUARD</span></div>
-<div class="circle rear"><span class="slot-name">REAR-GUARD</span></div>
+<div class="circle rear" id="back-left"><span class="slot-name">REAR-GUARD</span></div>
+<div class="circle rear" id="back-center"><span class="slot-name">REAR-GUARD</span></div>
+<div class="circle rear" id="back-right"><span class="slot-name">REAR-GUARD</span></div>
 </div>
 </div>
 </section>
-<div class="side-zones"><div class="zone">TRIGGER<b>—</b></div><div class="zone">SOUL<b>0</b></div><div class="zone">G / EXTRA<b>—</b></div></div>
-<div class="hand"><span class="hand-title">YOUR HAND</span><div class="cards"><i class="cardback"></i><i class="cardback"></i><i class="cardback"></i><i class="cardback"></i><i class="cardback"></i></div><span class="hand-title">5 CARDS</span></div>
+<div class="side-zones"><div class="zone">TRIGGER<b>—</b></div><div class="zone">SOUL<b id="soul-count">0</b></div><div class="zone">G / EXTRA<b>—</b></div></div>
+<div class="hand"><span class="hand-title">YOUR HAND</span><div class="cards">
+<div class="hand-card"><span>⚔</span><small>GRADE 0</small></div><div class="hand-card"><span>🛡</span><small>GRADE 1</small></div><div class="hand-card"><span>✦</span><small>GRADE 2</small></div><div class="hand-card"><span>♜</span><small>GRADE 3</small></div><div class="hand-card"><span>✧</span><small>GRADE 1</small></div>
+</div><span class="hand-title">5</span></div>
 <div id="message">ヴァンガードサークルにユニットを召喚しよう！</div>
 </main>
 <div class="controls"><button id="summon">✦ ユニット召喚</button><button id="attack" disabled>⚔ アタック</button><button id="reset">リセット</button></div>
 <script>
 const player=document.getElementById('player'),message=document.getElementById('message'),attack=document.getElementById('attack');let summoned=false,turn=0;
-document.getElementById('summon').onclick=()=>{if(summoned)return;player.innerHTML='<div class="unit-token"><span class="symbol">🛡️</span><strong>ブレイブ・ナイト</strong><small>13000</small></div>';summoned=true;attack.disabled=false;message.textContent='ブレイブ・ナイトをヴァンガードサークルに召喚！';};
-attack.onclick=()=>{if(!summoned)return;turn++;const unit=player.querySelector('.unit-token');unit.animate([{transform:'scale(1)'},{transform:'scale(1.22) translateY(-12px)'},{transform:'scale(1)'}],{duration:650,easing:'ease-out'});message.textContent='ヴァンガードでアタック！ ('+turn+'回目)';};
+document.getElementById('summon').onclick=()=>{if(summoned)return;player.innerHTML='<div class="unit-token"><span class="symbol">🛡️</span><strong>ブレイブ・ナイト</strong><small>13000</small></div>';summoned=true;attack.disabled=false;message.textContent='ブレイブ・ナイトをヴァンガードサークルにライド！';};
+attack.onclick=()=>{if(!summoned)return;turn++;const unit=player.querySelector('.unit-token');unit.animate([{transform:'scale(1)'},{transform:'scale(1.16) translateY(-12px)'},{transform:'scale(1)'}],{duration:650,easing:'ease-out'});message.textContent='ヴァンガードでアタック！ ('+turn+'回目)';};
 document.getElementById('reset').onclick=()=>{summoned=false;turn=0;player.innerHTML='<span class="slot-name">VANGUARD</span>';attack.disabled=true;message.textContent='ヴァンガードサークルにユニットを召喚しよう！';};
 </script>
 </body>
